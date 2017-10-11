@@ -1,4 +1,4 @@
-package jenkins.plugins.office365connector;
+package jenkins.plugins.office365connector.util;
 
 import java.util.ArrayList;
 import java.util.List;

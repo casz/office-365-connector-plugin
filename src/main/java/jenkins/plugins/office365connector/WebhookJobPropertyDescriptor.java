@@ -13,26 +13,23 @@
  */
 package jenkins.plugins.office365connector;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import hudson.Extension;
 import hudson.model.Job;
 import hudson.model.JobPropertyDescriptor;
-import hudson.util.FormValidation;
 import net.sf.json.JSON;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
-import org.kohsuke.stapler.QueryParameter;
+import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.StaplerRequest;
 
 /**
  * Job Property Descriptor.
  */
 @Extension
+@Symbol("office365Webhooks")
 public final class WebhookJobPropertyDescriptor extends JobPropertyDescriptor {
 
     public WebhookJobPropertyDescriptor() {
@@ -64,10 +61,6 @@ public final class WebhookJobPropertyDescriptor extends JobPropertyDescriptor {
         return "Job Notification";
     }
 
-    public int getDefaultTimeout() {
-        return Webhook.DEFAULT_TIMEOUT;
-    }
-
     @Override
     public WebhookJobProperty newInstance(StaplerRequest req, JSONObject formData) throws FormException {
 
@@ -84,22 +77,9 @@ public final class WebhookJobPropertyDescriptor extends JobPropertyDescriptor {
                 }
             }
         }
-        WebhookJobProperty notificationProperty = new WebhookJobProperty(webhooks);
-        return notificationProperty;
+        return new WebhookJobProperty(webhooks);
     }
 
-    public FormValidation doCheckUrl(@QueryParameter String value) {
-        if (StringUtils.isBlank(value)) {
-            return FormValidation.error("URL must be provided");
-        }
-
-        try {
-            new URL(value);
-        } catch (MalformedURLException e) {
-            return FormValidation.error(e.getMessage());
-        }
-        return FormValidation.ok();
-    }
 
     @Override
     public boolean configure(StaplerRequest req, JSONObject formData) {
